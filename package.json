@@ -8,11 +8,12 @@
   "main": "dist/index",
   "typings": "dist/index",
   "scripts": {
-    "prepublishOnly": "npm run compile",
-    "compile": "npm run clean && tsc -p .",
-    "watch": "tsc -w -p .",
     "clean": "rm -rf dist",
-    "test": "jest"
+    "commit": "yarn git-cz",
+    "compile": "yarn clean && tsc -p .",
+    "prepublishOnly": "yarn compile",
+    "test": "jest",
+    "watch": "tsc -w -p ."
   },
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",
