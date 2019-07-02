@@ -24,5 +24,9 @@
     "dist/index.js",
     "dist/index.d.ts",
     "dist/lib"
-  ]
+  ],
+  "dependencies": {
+    "@types/seedrandom": "^2.4.28",
+    "seedrandom": "^3.0.1"
+  }
 }
