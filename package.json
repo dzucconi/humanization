@@ -1,6 +1,6 @@
 {
   "name": "humanization",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "To err is human",
   "repository": "https://github.com/dzucconi/humanization",
   "author": "dzucconi <mail@damonzucconi.com>",
@@ -12,6 +12,7 @@
     "commit": "yarn git-cz",
     "compile": "yarn clean && tsc -p .",
     "prepublishOnly": "yarn compile",
+    "semantic-release": "semantic-release",
     "test": "jest",
     "watch": "tsc -w -p ."
   },
@@ -23,6 +24,7 @@
     "cz-conventional-changelog": "^2.1.0",
     "husky": "^3.0.0",
     "jest": "^24.8.0",
+    "semantic-release": "^15.13.18",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.1"
   },
