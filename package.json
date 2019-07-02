@@ -1,6 +1,6 @@
 {
   "name": "humanization",
-  "version": "0.0.0-development",
+  "version": "0.0.1",
   "description": "To err is human",
   "repository": "https://github.com/dzucconi/humanization",
   "author": "dzucconi <mail@damonzucconi.com>",
@@ -19,6 +19,7 @@
   "devDependencies": {
     "@commitlint/cli": "8.0.0",
     "@commitlint/config-conventional": "8.0.0",
+    "@semantic-release/git": "^7.0.16",
     "@types/jest": "24.0.15",
     "commitizen": "3.1.1",
     "cz-conventional-changelog": "2.1.0",
@@ -46,5 +47,22 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "dist/**/*.{js,css}",
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
   }
 }
