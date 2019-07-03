@@ -1,5 +1,5 @@
-import { neighborsOf, Character } from "../lib/keyboard";
-import { sample } from "../lib/sample";
+import { neighborsOf, Character } from "../keyboard";
+import { sample } from "../sample";
 
 export const miss = (char: Character): Character => {
   const neighbors = neighborsOf(char);

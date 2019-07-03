@@ -1,6 +1,6 @@
 import { initRand } from "./rand";
 import { apply, applicator } from "./apply";
-import * as errorTypes from "../errorTypes";
+import * as errorTypes from "./errorTypes";
 
 const VALID_ERROR_TYPES: { [key: string]: string } = {
   omission: "omit",

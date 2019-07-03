@@ -1,4 +1,4 @@
-import { remapRange } from "../lib/remapRange";
+import { remapRange } from "../remapRange";
 
 const IGNORED_INPUT_TAILS = [","];
 

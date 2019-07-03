@@ -1,4 +1,4 @@
-import { initRand } from "../lib/rand";
+import { initRand } from "../rand";
 import { repeat } from "./repeat";
 
 describe("#repeat", () => {
