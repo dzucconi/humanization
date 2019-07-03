@@ -6,13 +6,36 @@
 
 ## Getting started
 
+```javascript
+import { humanize } from "humanization";
+
+humanize("All their equipment and instruments are alive.");
+// => "Alllllllllll their eequIpmeNT anD instuments re alivve."
+
+humanize("Thanks so much!", {
+  repetition: {
+    probability: 0.1,
+    type: "WORD"
+  },
+  // Implementing a custom "thanks" function
+  thanks: {
+    probability: 1.0,
+    type: "WORD",
+    function: word => (word.toLowerCase() === "thanks" ? "thx" : word)
+  }
+});
+// => "thx sooooooo much!"
+```
+
+## Development
+
 - `yarn install`
 - `yarn watch`
 
-## Testing
+### Testing
 
 - `yarn test` or `yarn test --watch`
 
-## Building
+### Building
 
 - `yarn compile`
