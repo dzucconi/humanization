@@ -1,8 +1,8 @@
 import { initRand } from "./rand";
-import { apply, applicator } from "./apply";
-import * as errorTypes from "./errorTypes";
+import { apply, Applicator } from "./apply";
+import * as mistakes from "./mistakes";
 
-const VALID_ERROR_TYPES: { [key: string]: string } = {
+const VALID_MISTAKE_TYPES: { [key: string]: string } = {
   omission: "omit",
   duplication: "duplicate",
   repetition: "repeat",
@@ -13,17 +13,17 @@ const VALID_ERROR_TYPES: { [key: string]: string } = {
   capitalized: "capitalize"
 };
 
-interface ErrorConfiguration {
+interface MistakeConfiguration {
   probability: number;
   type: "CHARACTER" | "WORD";
-  function?: (input: string) => string;
+  apply?: (input: string) => string;
 }
 
-interface ErrorsConfiguration {
-  [name: string]: ErrorConfiguration;
+interface MistakesConfiguration {
+  [name: string]: MistakeConfiguration;
 }
 
-const SAMPLE_ERROR_CONFIGURATION: ErrorsConfiguration = {
+const SAMPLE_MISTAKE_CONFIGURATION: MistakesConfiguration = {
   miss: {
     probability: 0.033,
     type: "CHARACTER"
@@ -62,45 +62,45 @@ const IGNORED_CHARACTERS = [" "];
 
 export function humanize(
   string: string,
-  errorConfiguration: ErrorsConfiguration = SAMPLE_ERROR_CONFIGURATION,
+  mistakeConfiguration: MistakesConfiguration = SAMPLE_MISTAKE_CONFIGURATION,
   options: { seed?: string } = {}
 ) {
   initRand(options.seed);
 
-  return Object.entries(errorConfiguration).reduce(
-    (transformedString, [errorType, errorConfiguration]) => {
-      const errorFn: applicator =
-        (errorTypes as any)[VALID_ERROR_TYPES[errorType]] ||
-        errorConfiguration.function;
+  return Object.entries(mistakeConfiguration).reduce(
+    (transformedString, [mistake, mistakeConfiguration]) => {
+      const applicator: Applicator =
+        (mistakes as any)[VALID_MISTAKE_TYPES[mistake]] ||
+        mistakeConfiguration.apply;
 
-      if (!errorFn) {
+      if (!applicator) {
         throw new Error(
-          `missing \`errorFn\` for ${errorType}:${JSON.stringify(
-            errorConfiguration
+          `missing \`applicator\` for ${mistake}:${JSON.stringify(
+            mistakeConfiguration
           )}`
         );
       }
 
       return (
         transformedString
-          // Apply word-level errors
+          // Apply word-level mistakes
           .split(" ")
           .map(word => {
-            if (errorConfiguration.type === "WORD") {
-              return apply(errorFn, word, errorConfiguration.probability);
+            if (mistakeConfiguration.type === "WORD") {
+              return apply(applicator, word, mistakeConfiguration.probability);
             }
 
             return word;
           })
           .join(" ")
-          // Apply char-level errors
+          // Apply char-level mistakes
           .split("")
           .map(char => {
             if (
-              errorConfiguration.type === "CHARACTER" &&
+              mistakeConfiguration.type === "CHARACTER" &&
               !IGNORED_CHARACTERS.includes(char)
             ) {
-              return apply(errorFn, char, errorConfiguration.probability);
+              return apply(applicator, char, mistakeConfiguration.probability);
             }
             return char;
           })

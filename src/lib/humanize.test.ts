@@ -35,7 +35,7 @@ describe("humanize", () => {
         foo: {
           type: "WORD",
           probability: 1,
-          function: word => word.replace(/(\w+)/g, "bar")
+          apply: word => word.replace(/(\w+)/g, "bar")
         }
       })
     ).toEqual(
