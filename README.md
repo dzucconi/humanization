@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/dzucconi/humanization.svg?branch=master)](https://travis-ci.org/dzucconi/humanization)
 
-`humanization` is a library that seeks to simulate human patterns of error when typing text. It can serve as a kind of ergonomic layer for automated chatbots to make them feel more human.
+`humanization` is a library that seeks to simulate human patterns of mistakes when typing text. It can serve as a kind of ergonomic layer for automated chatbots to make them feel more human.
 
 ## Getting started
 
@@ -17,11 +17,11 @@ humanize("Thanks so much!", {
     probability: 0.1,
     type: "WORD"
   },
-  // Implementing a custom "thanks" function
+  // Implementing a custom "thanks" applicator
   thanks: {
     probability: 1.0,
     type: "WORD",
-    function: word => (word.toLowerCase() === "thanks" ? "thx" : word)
+    apply: word => (word.toLowerCase() === "thanks" ? "thx" : word)
   }
 });
 // => "thx sooooooo much!"
