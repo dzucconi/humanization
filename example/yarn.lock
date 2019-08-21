@@ -2531,8 +2531,10 @@ https-browserify@^1.0.0:
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
 "humanization@link:..":
-  version "0.0.0"
-  uid ""
+  version "2.1.0"
+  dependencies:
+    "@types/seedrandom" "^2.4.28"
+    seedrandom "^3.0.1"
 
 iconv-lite@0.4.24, iconv-lite@^0.4.4:
   version "0.4.24"
@@ -3557,7 +3559,7 @@ pako@~1.0.5:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.10.tgz#4328badb5086a426aa90f541977d4955da5c9732"
   integrity sha512-0DTvPVU3ed8+HNXOu5Bs+o//Mbdj9VNQMUOe9oKCwh8l0GNwpTDMKCWbRjgtD291AWnkAgkqA/LOnQS8AmS1tw==
 
-parcel@^1.12.3:
+parcel@1.12.3:
   version "1.12.3"
   resolved "https://registry.yarnpkg.com/parcel/-/parcel-1.12.3.tgz#1f1341589380f20be924f1dd67c7fed193b346ec"
   integrity sha512-j9XCVLeol9qZvGemRKt2z8bptbXq9LVy8/IzjqWQKMiKd8DR0NpDAlRHV0zyF72/J/UUTsdsrhnw6UGo9nGI+Q==
