@@ -7,5 +7,5 @@ const sample =
 
 simulateTyping({
   message: humanize(sample),
-  onCharacter: character => (el.innerHTML += character)
+  onCharacter: ({ message }) => (el.innerHTML = message)
 }).then(() => (el.innerHTML += ' <a onclick="location.reload()">reload</a>'));

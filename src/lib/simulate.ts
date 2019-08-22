@@ -26,7 +26,13 @@ export const generateStrokes = ({
 };
 
 interface SimulateTyping extends GenerateStrokes {
-  onCharacter(character: string): void;
+  onCharacter({
+    character,
+    message
+  }: {
+    character: string;
+    message: string;
+  }): void;
 }
 
 export const simulateTyping = ({
@@ -37,15 +43,16 @@ export const simulateTyping = ({
 }: SimulateTyping) => {
   return generateStrokes({ message, pauseMin, pauseMax }).reduce(
     (promise, stroke) => {
-      return promise.then(() => {
+      return promise.then(prevMessage => {
+        const nextMessage = prevMessage + stroke.character;
         return new Promise(resolve => {
           setTimeout(() => {
-            onCharacter(stroke.character);
-            resolve();
+            onCharacter({ character: stroke.character, message: nextMessage });
+            resolve(nextMessage);
           }, stroke.pause);
         });
       });
     },
-    Promise.resolve(true)
+    Promise.resolve("")
   );
 };
