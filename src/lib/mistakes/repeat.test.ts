@@ -1,36 +1,25 @@
 import { initRand } from "../rand";
 import { repeat } from "./repeat";
+import { process, isProcessedWord } from "../process";
 
 describe("#repeat", () => {
   beforeAll(() => initRand("seed"));
 
-  test("repeats x", () => {
+  test("sometimes repeats ! on the end of hey", () => {
     const output = new Array(20)
       .fill(undefined)
-      .map(() => repeat("x"))
-      .map(x => x.length);
+      .map(() => repeat(process("hey!")[0]))
+      .map(hey => {
+        if (isProcessedWord(hey)) {
+          return hey[hey.length - 1].transformed.length;
+        }
+      });
 
-    expect(output).toEqual([
-      5,
-      5,
-      10,
-      8,
-      5,
-      7,
-      5,
-      6,
-      9,
-      5,
-      2,
-      5,
-      7,
-      4,
-      4,
-      4,
-      8,
-      6,
-      2,
-      4
+    // prettier-ignore
+    expect(output).toEqual(      [
+      1, 1, 1, 1, 1, 1, 1,
+      5, 1, 1, 5, 6, 1, 1,
+      1, 1, 1, 1, 1, 1
     ]);
   });
 });

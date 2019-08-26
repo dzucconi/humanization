@@ -2531,10 +2531,8 @@ https-browserify@^1.0.0:
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
 "humanization@link:..":
-  version "2.1.0"
-  dependencies:
-    "@types/seedrandom" "^2.4.28"
-    seedrandom "^3.0.1"
+  version "0.0.0"
+  uid ""
 
 iconv-lite@0.4.24, iconv-lite@^0.4.4:
   version "0.4.24"

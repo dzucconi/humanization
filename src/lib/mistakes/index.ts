@@ -5,4 +5,3 @@ export { omit } from "./omit";
 export { repeat } from "./repeat";
 export { substitute } from "./substitute";
 export { toggleCase } from "./toggleCase";
-export { transpose } from "./transpose";

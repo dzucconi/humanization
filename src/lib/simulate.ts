@@ -1,58 +1,92 @@
-const randRange = (min: number, max: number) =>
-  Math.random() * (max - min) + min;
+import { range } from "./rand";
+import { ProcessedCharacter } from "./process";
+import { Stream } from "./humanize";
 
-interface Stroke {
-  character: string;
+const isPromise = (val: void | Promise<any>): val is Promise<any> =>
+  val && (<Promise<any>>val).then !== undefined;
+
+export interface StrokedCharacter {
+  character: ProcessedCharacter;
   pause: number;
 }
 
-interface GenerateStrokes {
-  message: string;
+export type StrokedStream = StrokedCharacter[];
+
+export interface GenerateStrokedStream {
+  stream: Stream;
   pauseMin?: number;
   pauseMax?: number;
 }
 
-export const generateStrokes = ({
-  message,
+export const generateStrokedStream = ({
+  stream,
   pauseMin = 15,
   pauseMax = 250
-}: GenerateStrokes): Stroke[] => {
-  const strokes = message.split("").map(character => ({
-    character,
-    pause: randRange(pauseMin, pauseMax)
-  }));
+}: GenerateStrokedStream): StrokedStream =>
+  [].concat(
+    ...stream.map((word, i) => [
+      ...word.map(character => ({
+        character,
+        pause: range(pauseMin, pauseMax)
+      })),
 
-  return strokes;
-};
+      // Stream flattens out so re-introduce spaces
+      // appended to the end of each word (unless we're at the end):
+      ...(stream.length - 1 === i
+        ? []
+        : [
+            {
+              character: {
+                source: " ",
+                transformed: [" "]
+              },
+              pause: range(pauseMin, pauseMax)
+            }
+          ])
+    ])
+  );
 
-interface SimulateTyping extends GenerateStrokes {
-  onCharacter({
-    character,
-    message
+export interface SimulateTyping extends GenerateStrokedStream {
+  onStroke({
+    stroke,
+    strokedStream
   }: {
-    character: string;
-    message: string;
-  }): void;
+    stroke: StrokedCharacter;
+    strokedStream: StrokedStream;
+  }): void | Promise<any>;
 }
 
 export const simulateTyping = ({
-  message,
-  onCharacter,
+  stream,
+  onStroke,
   pauseMin = 15,
   pauseMax = 250
 }: SimulateTyping) => {
-  return generateStrokes({ message, pauseMin, pauseMax }).reduce(
+  return generateStrokedStream({ stream, pauseMin, pauseMax }).reduce(
     (promise, stroke) => {
-      return promise.then(prevMessage => {
-        const nextMessage = prevMessage + stroke.character;
+      return promise.then(prevStroke => {
+        const nextStream = [...prevStroke, stroke];
+
         return new Promise(resolve => {
+          const maybePromise = onStroke({
+            stroke,
+            strokedStream: nextStream
+          });
+
+          if (isPromise(maybePromise)) {
+            return maybePromise.then(() => resolve(nextStream));
+          }
+
+          // Or we just set a timeout for the pause of the stroke.
           setTimeout(() => {
-            onCharacter({ character: stroke.character, message: nextMessage });
-            resolve(nextMessage);
+            resolve(nextStream);
           }, stroke.pause);
         });
       });
     },
-    Promise.resolve("")
+    Promise.resolve([])
   );
 };
+
+export const toString = (strokedStream: StrokedStream): string =>
+  strokedStream.map(({ character }) => character.transformed.join("")).join("");
