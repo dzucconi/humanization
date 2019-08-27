@@ -1,112 +1,85 @@
 import { initRand } from "./rand";
 import { apply, Applicator } from "./apply";
-import * as mistakes from "./mistakes";
+import {
+  process,
+  ProcessedCharacter,
+  ProcessedWord,
+  ProcessedStream,
+  toString as processedStreamToString
+} from "./process";
+import { StrokedStream, toString as strokedStreamToString } from "./simulate";
+import * as Mistakes from "./mistakes";
 
-const VALID_MISTAKE_TYPES: { [key: string]: string } = {
-  omission: "omit",
-  duplication: "duplicate",
-  repetition: "repeat",
-  substitution: "substitute",
-  transposition: "transpose", // todo
-  miss: "miss",
-  misCased: "toggleCase", // rename?
-  capitalized: "capitalize"
-};
-
-interface MistakeConfiguration {
-  probability: number;
-  type: "CHARACTER" | "WORD";
-  apply?: (input: string) => string;
-}
-
-interface MistakesConfiguration {
-  [name: string]: MistakeConfiguration;
-}
-
-const SAMPLE_MISTAKE_CONFIGURATION: MistakesConfiguration = {
-  miss: {
-    probability: 0.033,
-    type: "CHARACTER"
+export const DEFAULT_MISTAKES: Mistake[] = [
+  {
+    apply: Mistakes.miss,
+    probability: 0.033
   },
-  omission: {
-    probability: 0.033,
-    type: "CHARACTER"
+  {
+    apply: Mistakes.omit,
+    probability: 0.033
   },
-  duplication: {
-    probability: 0.033,
-    type: "CHARACTER"
+  {
+    apply: Mistakes.duplicate,
+    probability: 0.001
   },
-  substitution: {
-    probability: 0.033,
-    type: "CHARACTER"
+  {
+    apply: Mistakes.toggleCase,
+    probability: 0.033
   },
-  transposition: {
-    probability: 0.033,
-    type: "CHARACTER"
+  {
+    apply: Mistakes.capitalize,
+    probability: 0.033
   },
-  misCased: {
-    probability: 0.033,
-    type: "CHARACTER"
+  {
+    apply: Mistakes.repeat,
+    probability: 0.5
   },
-  capitalized: {
-    probability: 0.033,
-    type: "CHARACTER"
-  },
-  repetition: {
-    probability: 0.1,
-    type: "WORD"
+  {
+    apply: Mistakes.substitute,
+    probability: 0.5
   }
-};
+];
 
-const IGNORED_CHARACTERS = [" "];
+export interface Mistake {
+  apply: Applicator;
+  probability: number;
+}
+
+export type Stream = ProcessedWord[];
 
 export function humanize(
   string: string,
-  mistakeConfiguration: MistakesConfiguration = SAMPLE_MISTAKE_CONFIGURATION,
-  options: { seed?: string } = {}
-) {
-  initRand(options.seed);
+  options: {
+    seed?: string;
+    mistakes?: Mistake[];
+  }
+): Stream {
+  const { seed, mistakes = DEFAULT_MISTAKES } = options;
+  const stream = process(string);
 
-  return Object.entries(mistakeConfiguration).reduce(
-    (transformedString, [mistake, mistakeConfiguration]) => {
-      const applicator: Applicator =
-        (mistakes as any)[VALID_MISTAKE_TYPES[mistake]] ||
-        mistakeConfiguration.apply;
+  initRand(seed);
 
-      if (!applicator) {
-        throw new Error(
-          `missing \`applicator\` for ${mistake}:${JSON.stringify(
-            mistakeConfiguration
-          )}`
-        );
-      }
-
-      return (
-        transformedString
-          // Apply word-level mistakes
-          .split(" ")
-          .map(word => {
-            if (mistakeConfiguration.type === "WORD") {
-              return apply(applicator, word, mistakeConfiguration.probability);
-            }
-
-            return word;
-          })
-          .join(" ")
-          // Apply char-level mistakes
-          .split("")
-          .map(char => {
-            if (
-              mistakeConfiguration.type === "CHARACTER" &&
-              !IGNORED_CHARACTERS.includes(char)
-            ) {
-              return apply(applicator, char, mistakeConfiguration.probability);
-            }
-            return char;
-          })
-          .join("")
-      );
-    },
-    string
-  );
+  return mistakes.reduce((stream, mistake) => {
+    return stream.map(word => {
+      return (apply(
+        mistake.apply,
+        word,
+        mistake.probability
+      ) as ProcessedWord).map(char => {
+        return apply(
+          mistake.apply,
+          char,
+          mistake.probability
+        ) as ProcessedCharacter;
+      });
+    });
+  }, stream);
 }
+
+export const toString = (stream: StrokedStream | ProcessedStream): string => {
+  if (stream[0].constructor === Array) {
+    return processedStreamToString(<ProcessedStream>stream);
+  }
+  return strokedStreamToString(<StrokedStream>stream);
+};

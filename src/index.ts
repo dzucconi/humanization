@@ -1,2 +1,3 @@
-export { humanize } from "./lib/humanize";
-export { generateStrokes, simulateTyping } from "./lib/simulate";
+export { process } from "./lib/process";
+export { humanize, toString } from "./lib/humanize";
+export { generateStrokedStream, simulateTyping } from "./lib/simulate";

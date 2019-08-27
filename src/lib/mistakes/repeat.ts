@@ -1,38 +1,58 @@
-import { remapRange } from "../remapRange";
+import { sample } from "../rand";
+import { times } from "../times";
+import { isProcessedWord } from "../process";
+import { Applicator } from "../apply";
 
 const IGNORED_INPUT_TAILS = [","];
 
-type TailProbabilityOffsets = { [key: string]: number };
+type TailProbabilities = { [key: string]: number };
 
-const TAIL_PROBABILITY_OFFSETS: TailProbabilityOffsets = {
+const TAIL_PROBABILITIES: TailProbabilities = {
   "!": 0.1,
   "?": 0.09,
   o: 0.07,
   u: 0.06
 };
 
-export const repeat = (input: string): string => {
-  const tail = input[input.length - 1];
+// prettier-ignore
+const LENGTHS = [
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  2, 2, 2, 2, 2, 2, 2,
+  3, 3, 3, 3, 3,
+  4, 4, 4,
+  5, 5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12
+]
 
-  if (IGNORED_INPUT_TAILS.includes(tail)) {
-    return input;
+export const repeat: Applicator = input => {
+  if (isProcessedWord(input)) {
+    const [tail, ...rest] = [...input].reverse();
+
+    if (IGNORED_INPUT_TAILS.includes(tail.source)) {
+      return input;
+    }
+
+    if (Math.random() > (TAIL_PROBABILITIES[tail.source] || 0)) {
+      return input;
+    }
+
+    return [
+      ...rest,
+      {
+        ...tail,
+        transformed: [
+          ...times(sample(LENGTHS), () => tail.source),
+          ...tail.transformed
+        ]
+      }
+    ];
   }
 
-  const probabilityOffset = TAIL_PROBABILITY_OFFSETS[tail] || 0.0;
-
-  const probability =
-    1.0 +
-    probabilityOffset -
-    remapRange(input.length, {
-      in: {
-        min: 1,
-        max: 20
-      },
-      out: {
-        min: 0.0,
-        max: 1.0
-      }
-    });
-
-  return Math.random() < probability ? repeat(input + tail) : input;
+  return input;
 };
