@@ -8,7 +8,7 @@ const sample =
 
 describe("humanize", () => {
   test("default configuration", () => {
-    expect(toString(humanize(sample, undefined, { seed: "seed" }))).toEqual(
+    expect(toString(humanize(sample, { seed: "seed" }))).toEqual(
       "Wah6 kind of wrok do drivsrs perffo?m Which uhman tsak ill AI come fo recodr iwth its sensors, imitat wiht igs tsatistifal moDels, adn replac iht automatiOn?"
     );
   });
@@ -16,18 +16,15 @@ describe("humanize", () => {
   test("accepts an error configuration", () => {
     expect(
       toString(
-        humanize(
-          sample,
-          [
+        humanize(sample, {
+          seed: "seed",
+          mistakes: [
             {
               apply: capitalize,
               probability: 0.5
             }
-          ],
-          {
-            seed: "seed"
-          }
-        )
+          ]
+        })
       )
     ).toEqual(
       "WhAT KiND oF Work DO driVeRS PERfoRm? WhIch HUmAn TaSK wiLL AI COME To RecorD WItH ITS sENSorS, iMItATe wItH Its STAtISTiCAl mOdELs, AND ReplAcE wiTH AUTOmaTIoN?"
@@ -50,7 +47,7 @@ describe("humanize", () => {
       return input;
     };
     expect(
-      toString(humanize(sample, [{ apply: bar, probability: 1 }]))
+      toString(humanize(sample, { mistakes: [{ apply: bar, probability: 1 }] }))
     ).toEqual(
       "bar bar bar bar bar bar bar? bar bar bar bar bar bar bar bar bar bar bar, bar bar bar bar bar, bar bar bar bar?"
     );
