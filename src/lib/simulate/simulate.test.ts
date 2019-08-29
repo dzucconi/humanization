@@ -44,24 +44,24 @@ describe("simulate", () => {
           processedCharacter: { source: " ", transformed: [" "] }
         },
         {
-          character: "d",
-          processedCharacter: { source: "d", transformed: ["d"] }
-        },
-        {
-          character: "l",
-          processedCharacter: { source: "l", transformed: ["l"] }
-        },
-        {
-          character: "r",
-          processedCharacter: { source: "r", transformed: ["r"] }
+          character: "w",
+          processedCharacter: { source: "w", transformed: ["w"] }
         },
         {
           character: "o",
           processedCharacter: { source: "o", transformed: ["o"] }
         },
         {
-          character: "w",
-          processedCharacter: { source: "w", transformed: ["w"] }
+          character: "r",
+          processedCharacter: { source: "r", transformed: ["r"] }
+        },
+        {
+          character: "l",
+          processedCharacter: { source: "l", transformed: ["l"] }
+        },
+        {
+          character: "d",
+          processedCharacter: { source: "d", transformed: ["d"] }
         },
         {
           character: "!",

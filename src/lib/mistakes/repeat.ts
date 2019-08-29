@@ -45,7 +45,7 @@ export const repeat: Applicator = input => {
     }
 
     return [
-      ...rest,
+      ...rest.reverse(),
       {
         ...tail,
         transformed: [
