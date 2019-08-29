@@ -11,34 +11,13 @@ import { StrokedStream, toString as strokedStreamToString } from "./simulate";
 import * as Mistakes from "./mistakes";
 
 export const DEFAULT_MISTAKES: Mistake[] = [
-  {
-    apply: Mistakes.miss,
-    probability: 0.033
-  },
-  {
-    apply: Mistakes.omit,
-    probability: 0.033
-  },
-  {
-    apply: Mistakes.duplicate,
-    probability: 0.001
-  },
-  {
-    apply: Mistakes.toggleCase,
-    probability: 0.033
-  },
-  {
-    apply: Mistakes.capitalize,
-    probability: 0.033
-  },
-  {
-    apply: Mistakes.repeat,
-    probability: 0.5
-  },
-  {
-    apply: Mistakes.substitute,
-    probability: 0.5
-  }
+  { apply: Mistakes.miss, probability: 0.033 },
+  { apply: Mistakes.omit, probability: 0.033 },
+  { apply: Mistakes.duplicate, probability: 0.001 },
+  { apply: Mistakes.toggleCase, probability: 0.033 },
+  { apply: Mistakes.capitalize, probability: 0.033 },
+  { apply: Mistakes.repeat, probability: 0.5 },
+  { apply: Mistakes.substitute, probability: 0.5 }
 ];
 
 export interface Mistake {
@@ -53,12 +32,12 @@ export function humanize(
   options: {
     seed?: string;
     mistakes?: Mistake[];
-  }
+  } = {}
 ): Stream {
   const { seed, mistakes = DEFAULT_MISTAKES } = options;
   const stream = process(string);
 
-  initRand(seed);
+  if (seed) initRand(seed);
 
   return mistakes.reduce((stream, mistake) => {
     return stream.map(word => {
