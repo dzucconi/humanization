@@ -16,10 +16,9 @@ describe("#repeat", () => {
       });
 
     // prettier-ignore
-    expect(output).toEqual(      [
-      1, 1, 1, 1, 1, 1, 1,
-      5, 1, 1, 5, 6, 1, 1,
-      1, 1, 1, 1, 1, 1
+    expect(output).toEqual([
+      1, 1, 1, 1, 1, 1, 1, 7, 1, 1,
+      6, 8, 1, 1, 1, 1, 1, 1, 1, 1
     ]);
   });
 });

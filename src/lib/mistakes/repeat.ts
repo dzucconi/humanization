@@ -1,5 +1,5 @@
 import { sample } from "../rand";
-import { times } from "../times";
+import { times } from "../util";
 import { isProcessedWord } from "../process";
 import { Applicator } from "../apply";
 
@@ -11,12 +11,14 @@ const TAIL_PROBABILITIES: TailProbabilities = {
   "!": 0.1,
   "?": 0.09,
   o: 0.07,
-  u: 0.06
+  u: 0.06,
+  e: 0.03,
+  i: 0.03,
+  y: 0.03
 };
 
 // prettier-ignore
 const LENGTHS = [
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   2, 2, 2, 2, 2, 2, 2,
   3, 3, 3, 3, 3,
   4, 4, 4,
