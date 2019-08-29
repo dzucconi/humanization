@@ -7,7 +7,7 @@ const IGNORED_INPUT_TAILS = [","];
 
 type TailProbabilities = { [key: string]: number };
 
-const TAIL_PROBABILITIES: TailProbabilities = {
+const DEFAULT_TAIL_PROBABILITIES: TailProbabilities = {
   "!": 0.1,
   "?": 0.09,
   o: 0.07,
@@ -32,7 +32,10 @@ const LENGTHS = [
   12
 ]
 
-export const repeat: Applicator = input => {
+export const repeat: Applicator = (
+  input,
+  tailProbabilities: TailProbabilities = DEFAULT_TAIL_PROBABILITIES
+) => {
   if (isProcessedWord(input)) {
     const [tail, ...rest] = [...input].reverse();
 
@@ -40,7 +43,7 @@ export const repeat: Applicator = input => {
       return input;
     }
 
-    if (Math.random() > (TAIL_PROBABILITIES[tail.source] || 0)) {
+    if (Math.random() > (tailProbabilities[tail.source] || 0)) {
       return input;
     }
 
