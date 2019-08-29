@@ -9,20 +9,27 @@
 ```javascript
 import { humanize } from "humanization";
 
-humanize("All their equipment and instruments are alive.");
+humanize("All their equipment and instruments are alive.").toString();
 // => "Alllllllllll their eequIpmeNT anD instuments re alivve."
+```
+
+```javascript
+import { humanize, mistakes } from "humanization";
 
 humanize("Thanks so much!", {
-  repetition: {
-    probability: 0.1,
-    type: "WORD"
-  },
-  // Implementing a custom "thanks" applicator
-  thanks: {
-    probability: 1.0,
-    type: "WORD",
-    apply: word => (word.toLowerCase() === "thanks" ? "thx" : word)
-  }
+  seed: "1234",
+  mistakes: [
+    {
+      apply: mistakes.capitalize,
+      probability: 0.5
+    },
+    // Implementing a custom "thanks" applicator
+    {
+      probability: 1.0,
+      type: "WORD",
+      apply: word => (word.toLowerCase() === "thanks" ? "thx" : word)
+    }
+  ]
 });
 // => "thx sooooooo much!"
 ```

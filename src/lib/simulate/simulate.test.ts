@@ -12,7 +12,7 @@ describe("simulate", () => {
         generateStrokedStream({
           stream: humanize("hello! world!", {
             mistakes: [{ apply: repeat, probability: 1 }]
-          })
+          }).stream
         })
       ).toStrictEqual([
         {
