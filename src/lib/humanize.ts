@@ -27,33 +27,47 @@ export interface Mistake {
 
 export type Stream = ProcessedWord[];
 
+class Humanized {
+  stream: Stream;
+
+  constructor(stream: Stream) {
+    this.stream = stream;
+  }
+
+  toString() {
+    return toString(this.stream);
+  }
+}
+
 export function humanize(
   string: string,
   options: {
     seed?: string;
     mistakes?: Mistake[];
   } = {}
-): Stream {
+): Humanized {
   const { seed, mistakes = DEFAULT_MISTAKES } = options;
   const stream = process(string);
 
   if (seed) initRand(seed);
 
-  return mistakes.reduce((stream, mistake) => {
-    return stream.map(word => {
-      return (apply(
-        mistake.apply,
-        word,
-        mistake.probability
-      ) as ProcessedWord).map(char => {
-        return apply(
+  return new Humanized(
+    mistakes.reduce((stream, mistake) => {
+      return stream.map(word => {
+        return (apply(
           mistake.apply,
-          char,
+          word,
           mistake.probability
-        ) as ProcessedCharacter;
+        ) as ProcessedWord).map(char => {
+          return apply(
+            mistake.apply,
+            char,
+            mistake.probability
+          ) as ProcessedCharacter;
+        });
       });
-    });
-  }, stream);
+    }, stream)
+  );
 }
 
 export const toString = (stream: StrokedStream | ProcessedStream): string => {

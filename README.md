@@ -9,22 +9,57 @@
 ```javascript
 import { humanize } from "humanization";
 
-humanize("All their equipment and instruments are alive.");
-// => "Alllllllllll their eequIpmeNT anD instuments re alivve."
+humanize("All their equipment and instruments are alive.").toString();
+// => "All thei5 eqjipmetn and insfrmuents rAe alIve."
+```
 
-humanize("Thanks so much!", {
-  repetition: {
-    probability: 0.1,
-    type: "WORD"
-  },
-  // Implementing a custom "thanks" applicator
-  thanks: {
-    probability: 1.0,
-    type: "WORD",
-    apply: word => (word.toLowerCase() === "thanks" ? "thx" : word)
+```javascript
+import {
+  humanize,
+  mistakes,
+  process,
+  isProcessedWord,
+  ProcessedCharacter,
+  Applicable
+} from "humanization";
+
+const [thx] = process("thx");
+const print = (input: ProcessedCharacter[]) =>
+  input.map(({ source }) => source).join("");
+
+const thanks = (input: Applicable): Applicable => {
+  // Only re-write words that match 'thanks':
+  if (isProcessedWord(input) && /thanks/i.test(print(input))) {
+    return [
+      // Replace entire word with "thx"
+      ...thx,
+      // Leaves punctuation intact
+      ...input.filter(processedCharacter =>
+        /[,.?!\-]/.test(processedCharacter.source)
+      )
+    ];
   }
-});
-// => "thx sooooooo much!"
+
+  return input;
+};
+
+humanize("hey thanks so much!", {
+  seed: "1234",
+  mistakes: [
+    // Mistakes are applied in order from top to bottom
+    { apply: mistakes.capitalize, probability: 0.5 },
+    { apply: thanks, probability: 1 },
+    {
+      apply: input =>
+        mistakes.repeat(input, {
+          "!": 1,
+          x: 1
+        }),
+      probability: 1
+    }
+  ]
+}).toString();
+// => "hEY thxxxxxxxxx SO mUCh!!!"
 ```
 
 ## Development
