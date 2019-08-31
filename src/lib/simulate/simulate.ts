@@ -54,9 +54,11 @@ export interface SimulateTyping extends GenerateStrokedStream {
   pauseMax?: number;
   onStroke({
     stroke,
+    previousStroke,
     strokedStream
   }: {
     stroke: StrokedCharacter;
+    previousStroke: StrokedCharacter;
     strokedStream: StrokedStream;
   }): void | Promise<any>;
 }
@@ -95,13 +97,15 @@ export const simulateTyping = ({
   pauseMin = 15,
   pauseMax = 250
 }: SimulateTyping) => {
-  return generateStrokedStream({ stream }).reduce((promise, stroke) => {
+  return generateStrokedStream({ stream }).reduce((promise, stroke, index) => {
     return promise.then((prevStrokes: StrokedStream | []) => {
       const nextStream = [...prevStrokes, stroke];
+      const previousStroke = prevStrokes[index - 1];
 
       return new Promise(resolve => {
         const maybePromise = onStroke({
           stroke,
+          previousStroke,
           strokedStream: nextStream
         });
 
