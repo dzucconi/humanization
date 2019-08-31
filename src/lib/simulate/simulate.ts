@@ -4,6 +4,7 @@ import { ProcessedCharacter } from "../process";
 import { Stream } from "../humanize";
 
 export interface StrokedCharacter {
+  index: [number, number] | [];
   character: string;
   processedCharacter: ProcessedCharacter;
 }
@@ -18,11 +19,12 @@ export const generateStrokedStream = ({
   stream
 }: GenerateStrokedStream): StrokedStream =>
   [].concat(
-    ...stream.map((word, i) => [
+    ...stream.map((word, wordIndex) => [
       ...[].concat(
-        ...word.map(processedCharacter => {
+        ...word.map((processedCharacter, characterIndex) => {
           return processedCharacter.transformed.map(
             (character: string): StrokedCharacter => ({
+              index: [wordIndex, characterIndex],
               character,
               processedCharacter
             })
@@ -32,10 +34,11 @@ export const generateStrokedStream = ({
 
       // Stream flattens out so re-introduce spaces
       // appended to the end of each word (unless we're at the end):
-      ...(stream.length - 1 === i
+      ...(stream.length - 1 === wordIndex
         ? []
         : [
             <StrokedCharacter>{
+              index: [],
               character: " ",
               processedCharacter: {
                 source: " ",
