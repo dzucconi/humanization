@@ -21,7 +21,11 @@ export const isProcessedCharacter = (
 };
 
 export const process = (inputString: string): ProcessedStream => {
-  const words = inputString.split(" ").map(word => word.split(""));
+  const words = inputString.split(" ").map(word => {
+    if (word === "") return [""]; // Already irreducible
+    return word.split("");
+  });
+
   return words.map(word => {
     return word.map(character => {
       return {
