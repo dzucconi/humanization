@@ -27,11 +27,6 @@ describe("#process", () => {
 
     expect(processed).toStrictEqual([
       [{ source: "\n", transformed: ["\n"] }],
-      [{ source: "", transformed: [""] }],
-      [{ source: "", transformed: [""] }],
-      [{ source: "", transformed: [""] }],
-      [{ source: "", transformed: [""] }],
-      [{ source: "", transformed: [""] }],
       [
         { source: "h", transformed: ["h"] },
         { source: "e", transformed: ["e"] },
@@ -46,11 +41,7 @@ describe("#process", () => {
         { source: "l", transformed: ["l"] },
         { source: "d", transformed: ["d"] },
         { source: "\n", transformed: ["\n"] }
-      ],
-      [{ source: "", transformed: [""] }],
-      [{ source: "", transformed: [""] }],
-      [{ source: "", transformed: [""] }],
-      [{ source: "", transformed: [""] }]
+      ]
     ]);
   });
 });
