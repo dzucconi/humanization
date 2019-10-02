@@ -24,8 +24,7 @@ export const process = (inputString: string): ProcessedStream => {
   const words = inputString
     .split(" ")
     .filter(word => word !== "")
-    .map(word => word.split(""))
-    .filter(Boolean);
+    .map(word => word.split(""));
 
   return words.map(word => {
     return word.map(character => {
