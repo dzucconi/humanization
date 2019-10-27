@@ -58,7 +58,7 @@ export interface SimulateTyping extends GenerateStrokedStream {
     strokedStream
   }: {
     stroke: StrokedCharacter;
-    previousStroke: StrokedCharacter;
+    previousStroke?: StrokedCharacter;
     strokedStream: StrokedStream;
   }): void | Promise<any>;
 }
