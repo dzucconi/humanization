@@ -27,7 +27,7 @@
     "jest": "24.9.0",
     "semantic-release": "15.14.0",
     "ts-jest": "24.3.0",
-    "typescript": "3.7.4"
+    "typescript": "3.7.5"
   },
   "files": [
     "dist/index.js",
