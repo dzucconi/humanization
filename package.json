@@ -24,9 +24,9 @@
     "commitizen": "4.2.4",
     "cz-conventional-changelog": "3.3.0",
     "husky": "3.1.0",
-    "jest": "24.9.0",
+    "jest": "27.0.6",
     "semantic-release": "15.14.0",
-    "ts-jest": "24.3.0",
+    "ts-jest": "27.0.3",
     "typescript": "3.9.9"
   },
   "files": [
