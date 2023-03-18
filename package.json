@@ -23,7 +23,7 @@
     "@types/jest": "24.9.1",
     "commitizen": "4.2.4",
     "cz-conventional-changelog": "3.3.0",
-    "husky": "3.1.0",
+    "husky": "8.0.3",
     "jest": "24.9.0",
     "semantic-release": "15.14.0",
     "ts-jest": "24.3.0",
