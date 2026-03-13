@@ -35,7 +35,7 @@
     "dist/lib"
   ],
   "dependencies": {
-    "@types/seedrandom": "^2.4.28",
+    "@types/seedrandom": "^3.0.0",
     "seedrandom": "^3.0.1"
   },
   "config": {
